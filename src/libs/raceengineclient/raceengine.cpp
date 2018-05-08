@@ -39,11 +39,127 @@
 
 #include "raceengine.h"
 
+
+#include <iostream>
+#include <cstdio>
+#include <ctime>
 #define image_width 640
 #define image_height 480
-
+#define PI 3.1415926
 static double	msgDisp;
 static double	bigMsgDisp;
+//zj
+extern bool* pis_restart_main_write;
+extern double* psteer_main_write;
+extern double* pbrake_main_write;
+extern double* paccel_main_write;
+extern int* pgear_main_write;
+extern double* pclutch_main_write;
+
+extern double* pspeed_x_main_read;
+extern double* pspeed_y_main_read;
+extern double* pspeed_z_main_read;
+extern double* psteer_main_read;
+extern double* pbrake_main_read;
+extern double* paccel_main_read;
+extern int* pgear_main_read;
+extern double* pclutch_main_read;
+extern double* ptrack_angle_main_read;
+extern bool* pis_hit_wall_main_read;
+extern bool* pis_finish_main_read;
+extern double* ptrack_pos_main_read;
+extern double* prpm_main_read;
+extern bool* pis_stuck_main_read;
+
+double* ptrack_radius_main_read;
+bool* pis_ready_main_read;
+
+bool* pis_restart_write=NULL;
+double* psteer_write=NULL;
+double* pbrake_write = NULL;
+double* paccel_write = NULL;
+int* pgear_write = NULL;
+double* pclutch_write = NULL;
+
+double* pspeed_read =NULL;
+double* psteer_read=NULL;
+double* pbrake_read = NULL;
+double* paccel_read = NULL;
+int* pgear_read = NULL;
+double* pclutch_read = NULL;
+double* ptrack_angle_read=NULL;
+bool* pis_finish_read=NULL;
+bool* pis_hit_wall_read=NULL;
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+//extern float* angle_dqn_main;
+//extern float* track_dqn_main;
+//extern float* track_pos_dqn_main;
+//extern float* speed_x_dqn_main;
+//extern float* speed_y_dqn_main;
+//extern float* speed_z_dqn_main;
+//extern float* wheel_dqn_main;
+//extern float* rpm_dqn_main;
+extern bool* is_ready_dqn_main;
+extern bool is_sim_dqn_main;
+
+
+extern float* angle_dqn_main;
+extern float* track_dqn_main;
+extern float* opponents_main;
+extern float* focus_main;
+extern float* track_pos_dqn_main;
+extern float* speed_x_dqn_main;
+extern float* speed_y_dqn_main;
+extern float* speed_z_dqn_main;
+extern float* wheel_dqn_main;
+extern float* rpm_dqn_main;
+extern float* damage_main;
+extern float* curLapTime_main;
+extern float* lastLapTime_main;
+extern float* distFromStart_main;
+extern float* distRaced_main;
+extern float* fuel_main;
+extern int* racePos_main;
+extern int* gear_main;
+extern float* z_main;
+
+
+float* angle_dqn_local;
+float* track_dqn_local;
+float* opponents_local;
+float* focus_local;
+float* track_pos_dqn_local;
+float* speed_x_dqn_local;
+float* speed_y_dqn_local;
+float* speed_z_dqn_local;
+float* wheel_dqn_local;
+float* rpm_dqn_local;
+float* damage_local;
+float* curLapTime_local;
+float* lastLapTime_local;
+float* distFromStart_local;
+float* distRaced_local;
+float* fuel_local;
+int* racePos_local;
+int* gear_local;
+float* z_local;
+
+//float* angle_dqn_local;
+//float* track_dqn_local;
+//float* track_pos_dqn_local;
+//float* speed_x_dqn_local;
+//float* speed_y_dqn_local;
+//float* speed_z_dqn_local;
+//float* wheel_dqn_local;
+//float* rpm_dqn_local;
+
+bool* is_ready_dqn_local;
+bool is_sim_dqn_local;
+int count=0;
+int stuck_count = 0;
+int out_track_count = 0;
+int low_speed_count = 0;
 
 tRmInfo	*ReInfo = 0;
 int RESTART = 0;
@@ -55,6 +171,7 @@ static void ReRaceRules(tCarElt *car);
 static void
 ReUpdtPitTime(tCarElt *car)
 {
+	// *pis_stuck_main_read = false;
 	tSituation *s = ReInfo->s;
 	tReCarInfo *info = &(ReInfo->_reCarInfo[car->index]);
 	int i;
@@ -362,6 +479,7 @@ ReManage(tCarElt *car)
 	car->_distFromStartLine = car->_trkPos.seg->lgfromstart +
 	(car->_trkPos.seg->type == TR_STR ? car->_trkPos.toStart : car->_trkPos.toStart * car->_trkPos.seg->radius);
 	car->_distRaced = (car->_laps - (info->lapFlag + 1)) * ReInfo->track->length + car->_distFromStartLine;
+
 }
 
 
@@ -637,6 +755,7 @@ ReRaceRules(tCarElt *car)
 			GF_TAILQ_INSERT_TAIL(&(car->_penaltyList), penalty, link);
 		}
 	}
+	
 }
 extern int* pwritten;
 extern uint8_t* pdata;
@@ -644,43 +763,97 @@ extern int* ppause;
 extern int* pzmq_flag;
 extern int* psave_flag;
 
-int count=0;
+
+
 
 
 static void
 ReOneStep(double deltaTimeIncrement)
 {
+	if(pis_restart_write == NULL){
+		pis_restart_write = pis_restart_main_write;
+		psteer_write = psteer_main_write;
+		pbrake_write = pbrake_main_write;
+		paccel_write = paccel_main_write;
+		pgear_write = pgear_main_write;
+		pclutch_write = pclutch_main_write;
 
-	if (*ppause == 1) 
-     { 
-        count++;
-        if (count>50) // 10FPS
-        {
-           count=1;
 
-           glReadPixels(0, 0, image_width, image_height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)pdata);
+		pspeed_read = pspeed_x_main_read;
+		psteer_read = psteer_main_read;
+		pbrake_read = pbrake_main_read;
+		paccel_read = paccel_main_read;
+		pgear_read = pgear_main_read;
+		pclutch_read = pclutch_main_read;
+		ptrack_angle_read = ptrack_angle_main_read;
+		pis_hit_wall_read = pis_hit_wall_main_read;
+		pis_finish_read = pis_finish_main_read;
 
-           *pwritten=1;
-
-           double t = GfTimeClock();
-           if ((t - ReInfo->_reCurTime) > 30*RCM_MAX_DT_SIMU)
-               ReInfo->_reCurTime = t - RCM_MAX_DT_SIMU;
-        }       
-    }
-
-    int i;
+        angle_dqn_local = angle_dqn_main;
+        track_dqn_local = track_dqn_main;
+        opponents_local = opponents_main;
+        focus_local = focus_main;
+        track_pos_dqn_local = track_pos_dqn_main;
+        speed_x_dqn_local = speed_x_dqn_main;
+        speed_y_dqn_local = speed_y_dqn_main;
+        speed_z_dqn_local = speed_z_dqn_main;
+        wheel_dqn_local = wheel_dqn_main;
+        rpm_dqn_local = rpm_dqn_main;
+        damage_local = damage_main;
+        curLapTime_local = curLapTime_main;
+        lastLapTime_local = lastLapTime_main;
+        distFromStart_local = distFromStart_main;
+        distRaced_local = distRaced_main;
+        fuel_local = fuel_main;
+        racePos_local = racePos_main;
+        gear_local = gear_main;
+        z_local = z_main;
+		//angle_dqn_local = angle_dqn_main;
+		//track_dqn_local = track_dqn_main;
+		//track_pos_dqn_local = track_pos_dqn_main;
+		//speed_x_dqn_local = speed_x_dqn_main;
+		//speed_y_dqn_local = speed_y_dqn_main;
+		//speed_z_dqn_local = speed_z_dqn_main;
+		//wheel_dqn_local = wheel_dqn_main;
+		//rpm_dqn_local = rpm_dqn_main;
+		is_ready_dqn_local = is_ready_dqn_main;
+		is_sim_dqn_local = is_sim_dqn_main;
+		// printf("eng: %p\n",(void*)pspeed_read);
+		
+	}
+	int i;
 	tRobotItf *robot;
 	tSituation *s = ReInfo->s;
+	//printf("ppause: %d\n",*ppause);
+    //*ppause = 1;
+	if (*ppause == 1) 
+	{ 
+		count++;
+		if (count>50) // 10FPS
+		{
+			count=1;
+			
+			glReadPixels(0, 0, image_width, image_height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)pdata);
 
-	if ((ReInfo->_displayMode != RM_DISP_MODE_NONE) && (ReInfo->_displayMode != RM_DISP_MODE_CONSOLE)) {
-		if (floor(s->currentTime) == -2.0) {
-			ReRaceBigMsgSet("Ready", 1.0);
-		} else if (floor(s->currentTime) == -1.0) {
-			ReRaceBigMsgSet("Set", 1.0);
-		} else if (floor(s->currentTime) == 0.0) {
-			ReRaceBigMsgSet("Go", 1.0);
-		}
-	}
+			*pwritten=1;
+
+			double t = GfTimeClock();
+			if ((t - ReInfo->_reCurTime) > 30*RCM_MAX_DT_SIMU)
+				ReInfo->_reCurTime = t - RCM_MAX_DT_SIMU;
+		}       
+    }
+
+ 
+	//zj
+	// if ((ReInfo->_displayMode != RM_DISP_MODE_NONE) && (ReInfo->_displayMode != RM_DISP_MODE_CONSOLE)) {
+	// 	if (floor(s->currentTime) == -2.0) {
+	// 		ReRaceBigMsgSet("Ready", 1.0);
+	// 	} else if (floor(s->currentTime) == -1.0) {
+	// 		ReRaceBigMsgSet("Set", 1.0);
+	// 	} else if (floor(s->currentTime) == 0.0) {
+	// 		ReRaceBigMsgSet("Go", 1.0);
+	// 	}
+	// }
 
 	ReInfo->_reCurTime += deltaTimeIncrement * ReInfo->_reTimeMult; /* "Real" time */
 	s->currentTime += deltaTimeIncrement; /* Simulated time */
@@ -706,9 +879,84 @@ ReOneStep(double deltaTimeIncrement)
 		ReInfo->_reLastTime = s->currentTime;
 	}
 	STOP_PROFILE("rbDrive*");
+	// std::clock_t start;
+    // double duration;
 
+    // start = std::clock();
 	START_PROFILE("_reSimItf.update*");
 	ReInfo->_reSimItf.update(s, deltaTimeIncrement, -1);
+	// duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+
+    // std::cout<<"printf: "<< duration <<'\n';
+	//zj
+		is_sim_dqn_main = true;	
+		*pis_ready_main_read = false;
+		tCarElt* car = s->cars[0];
+		*pspeed_x_main_read = car->_speed_x * 3.6;
+		*pspeed_y_main_read = car->_speed_y * 3.6;
+		*pspeed_z_main_read = car->_speed_z * 3.6;
+		*psteer_main_read = car->_steerCmd;
+		*pbrake_main_read = car->_brakeCmd;
+		*paccel_main_read = car->_accelCmd;
+		*pgear_main_read = car->_gearCmd;
+		*pclutch_main_read = car->_clutchCmd;
+		tdble trackangle = RtTrackSideTgAngleL(&(car->_trkPos));
+		tdble angle = trackangle - car->_yaw;
+		NORM_PI_PI(angle);
+		*ptrack_angle_main_read = angle;
+		
+		if (car->priv.simcollision & SEM_COLLISION_XYSCENE) {
+			*pis_hit_wall_main_read = true;
+		}else{
+			*pis_hit_wall_main_read = false;
+		}
+
+		*ptrack_pos_main_read = 2*car->_trkPos.toMiddle/(car->_trkPos.seg->width);
+		*prpm_main_read = car->_enginerpm * 10;
+
+		*ptrack_radius_main_read = car->_trkPos.seg->radius;
+
+		if(car->_laps == s->_totLaps){
+			if(car->_distFromStartLine / ReInfo->track->length > 0.99){
+				*pis_finish_main_read = true;
+				// printf("\n%s\n","finish 99% race");
+			}else{
+				*pis_finish_main_read = false;
+			}
+		}
+		if (car->_speed_x < 0.4){
+			stuck_count++;
+		}else{
+			stuck_count = 0;
+		}
+		if (car->_speed_x > 0.4 && car->_speed_x < 2){
+			out_track_count++;
+		}else{
+			out_track_count = 0;
+		}
+		if (fabs(*ptrack_pos_main_read) > 1){
+			out_track_count++;
+		}else{
+			out_track_count = 0;
+		}
+		// printf("%d:\n",out_track_count);
+		if((*pspeed_x_main_read < 50 
+			&& fabs(*ptrack_pos_main_read) > 1 
+			&& (fabs(angle) >  PI / 8 )
+			&& out_track_count > 500)
+			|| stuck_count > 1500
+			|| out_track_count > 3000){
+				*pis_stuck_main_read = true;
+				//stuck_count = 0;
+				
+		}else{
+			*pis_stuck_main_read = false;
+		}
+
+
+		*pis_ready_main_read = true;
+
+	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	for (i = 0; i < s->_ncars; i++) {
 		ReManage(s->cars[i]);
 	}
@@ -717,6 +965,27 @@ ReOneStep(double deltaTimeIncrement)
 	if ((ReInfo->_displayMode != RM_DISP_MODE_NONE) && (ReInfo->_displayMode != RM_DISP_MODE_CONSOLE)) {
 		ReRaceMsgUpdate();
 	}
+
+
+	bool restartRequested = false;
+	for (i = 0; i < s->_ncars; i++) {
+		if(s->cars[i]->ctrl.askRestart) {
+			restartRequested = true;
+			*pis_stuck_main_read = false;
+            s->cars[i]->ctrl.askRestart = false;
+			}
+		}
+   
+    if(restartRequested){   
+		stuck_count = 0;
+		out_track_count = 0;
+        ReRaceCleanup();
+        ReInfo->_reState = RE_STATE_PRE_RACE;
+        GfuiScreenActivate(ReInfo->_reGameScreen);
+
+    }
+
+
 	ReSortCars();
 }
 

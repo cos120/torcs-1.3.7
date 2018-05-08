@@ -32,7 +32,8 @@
 #include <exitmenu.h>
 #include <musicplayer/musicplayer.h>
 #include <portability.h>
-
+//
+#include <unistd.h>
 #include "raceengine.h"
 #include "raceinit.h"
 #include "racegl.h"
@@ -309,7 +310,8 @@ static int reRaceRealStart(void)
 
 	ReInfo->_reTimeMult = 1.0;
 	ReInfo->_reLastTime = -1.0;
-	ReInfo->s->currentTime = -2.0;
+	//zj
+	ReInfo->s->currentTime = 0.0;
 	ReInfo->s->deltaTime = RCM_MAX_DT_SIMU;
 
 	ReInfo->s->_raceState = RM_RACE_STARTING;
@@ -559,6 +561,7 @@ int ReRaceStop(void)
 
 int ReRaceEnd(void)
 {
+	
 	int curDrvIdx;
 	void *params = ReInfo->params;
 	void *results = ReInfo->results;
@@ -575,7 +578,6 @@ int ReRaceEnd(void)
 		GfParmSetNum(results, RE_SECT_CURRENT, RE_ATTR_CUR_DRIVER, NULL, curDrvIdx);
 		return RM_SYNC | RM_NEXT_RACE;
 	}
-
 	return ReDisplayResults();
 }
 

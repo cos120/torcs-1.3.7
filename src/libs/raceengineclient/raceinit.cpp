@@ -126,10 +126,13 @@ void ReShutdown(void)
     }
 }
 
+extern bool* pis_stuck_main_read;
 
 void
 ReStartNewRace(void * /* dummy */)
 {
+	*pis_stuck_main_read = false;
+
 	ReInitResults();
 	ReStateManage();
 }

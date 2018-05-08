@@ -52,12 +52,13 @@ ReStateInit(void *prevMenu)
 
 /* State Automaton Management         */
 /* Called when a race menu is entered */
+
 void
 ReStateManage(void)
 {
 	int mode = RM_SYNC | RM_NEXT_STEP;
-
 	do {
+
 		switch (ReInfo->_reState) {
 			case RE_STATE_CONFIG:
 				GfOut("RaceEngine: state = RE_STATE_CONFIG\n");

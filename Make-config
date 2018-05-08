@@ -22,7 +22,7 @@ SHELL = /bin/bash
 srcdir = .
 top_srcdir = ${TORCS_BASE}
 
-prefix = /usr/local
+prefix = /home/bst2017/zj/software/bin
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin

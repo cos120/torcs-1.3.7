@@ -126,9 +126,28 @@ static Sensors *focusSens[NBBOTS];//ML
 static float trackSensAngle[NBBOTS][19];
 
 static const char* botname[NBBOTS] = {"scr_server 1", "scr_server 2", "scr_server 3", "scr_server 4", "scr_server 5", "scr_server 6", "scr_server 7", "scr_server 8", "scr_server 9", "scr_server 10"};
+// static const char* botname[NBBOTS] = {"dqn"};
 
 static unsigned long total_tics[NBBOTS];
 
+extern float* angle_dqn_main;
+extern float* track_dqn_main;
+extern float* track_pos_dqn_main;
+extern float* speed_x_dqn_main;
+extern float* speed_y_dqn_main;
+extern float* speed_z_dqn_main;
+extern float* wheel_dqn_main;
+extern float* rpm_dqn_main;
+
+
+extern bool* pis_restart_main_write;
+extern double* psteer_main_write;
+extern double* pbrake_main_write;
+extern double* paccel_main_write;
+extern int* pgear_main_write;
+extern double* pclutch_main_write;
+extern bool* is_ready_dqn_main;
+extern bool is_sim_dqn_main;
 /*
  * Module entry point
  */
@@ -162,19 +181,19 @@ InitFuncPt(int index, void *pt)
     itf->rbShutdown = shutdown;	 /* Called before the module is unloaded */
     itf->index      = index; 	 /* Index used if multiple interfaces */
 
-	#ifdef _WIN32
-     /* WinSock Startup */
+// 	#ifdef _WIN32
+//      /* WinSock Startup */
 
-     WSADATA wsaData={0};
-     WORD wVer = MAKEWORD(2,2);
-     int nRet = WSAStartup(wVer,&wsaData);
+//      WSADATA wsaData={0};
+//      WORD wVer = MAKEWORD(2,2);
+//      int nRet = WSAStartup(wVer,&wsaData);
 
-     if(nRet == SOCKET_ERROR)
-     {
- 	std::cout << "Failed to init WinSock library" << std::endl;
-	exit(1);
-     }
-#endif
+//      if(nRet == SOCKET_ERROR)
+//      {
+//  	std::cout << "Failed to init WinSock library" << std::endl;
+// 	exit(1);
+//      }
+// #endif
 
     return 0;
 }
@@ -185,6 +204,7 @@ initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSitu
 {
     curTrack = track;
     *carParmHandle = NULL;
+    
 #ifdef _PRINT_RACE_RESULTS__
     trackName = strrchr(track->filename, '/') + 1;
 #endif
@@ -205,8 +225,7 @@ newrace(int index, tCarElt* car, tSituation *s)
     char line[UDP_MSGLEN];
 
     // Set timeout
-    if (getTimeout()>0)
-    	UDP_TIMEOUT = getTimeout();
+
 
     //Set sensor range
     if (strcmp(getVersion(),"2009")==0)
@@ -222,86 +241,15 @@ newrace(int index, tCarElt* car, tSituation *s)
     	exit(0);
     }
 
-    listenSocket[index] = socket(AF_INET, SOCK_DGRAM, 0);
-    if (listenSocket[index] < 0)
-    {
-        std::cerr << "Error: cannot create listenSocket!";
-        exit(1);
-    }
 
     srand(time(NULL));
-
-    // Bind listen socket to listen port.
-    serverAddress[index].sin_family = AF_INET;
-    serverAddress[index].sin_addr.s_addr = htonl(INADDR_ANY);
-    serverAddress[index].sin_port = htons(UDP_LISTEN_PORT+index);
-
-    if (bind(listenSocket[index],
-             (struct sockaddr *) &serverAddress[index],
-             sizeof(serverAddress[index])) < 0)
-    {
-        std::cerr << "cannot bind socket";
-        exit(1);
+    float a__[19] = {-45 ,-19, -12 ,-7 ,-4 ,-2.5 ,-1.7 ,-1 ,-0.5, 0 ,0.5 ,1 ,1.7, 2.5 ,4 ,7 ,12 ,19, 45};
+    for (int i = 0; i < 19; ++i) {
+        trackSensAngle[index][i] = a__[i];
+        // std::cout << "trackSensAngle[" << i << "] " << trackSensAngle[index][i] << std::endl;
     }
-
-    // Wait for connections from clients.
-    listen(listenSocket[index], 5);
-
-    std::cout << "Waiting for request on port " << UDP_LISTEN_PORT+index << "\n";
-
-    // Loop until a client identifies correctly
-    while (!identified)
-    {
-        //std::cout << "!identified" << "\n";
-
-        clientAddressLength[index] = sizeof(clientAddress[index]);
-
-        // Set line to all zeroes
-        memset(line, 0x0, UDP_MSGLEN);
-        if (recvfrom(listenSocket[index], line, UDP_MSGLEN, 0,
-                     (struct sockaddr *) &clientAddress[index],
-                     &clientAddressLength[index]) < 0)
-        {
-            std::cerr << "Error: problem in receiving from the listen socket";
-            exit(1);
-        }
-
-#ifdef __UDP_SERVER_VERBOSE__
-        // show the client's IP address
-        std::cout << "  from " << inet_ntoa(clientAddress[index].sin_addr);
-
-        // show the client's port number.
-        std::cout << ":" << ntohs(clientAddress[index].sin_port) << "\n";
-
-        // Show the line
-        std::cout << "  Received: " << line << "\n";
-#endif
-
-        // compare received string with the ID
-        if (strncmp(line,UDP_ID,3)==0)
-        {
-#ifdef __UDP_SERVER_VERBOSE__
-            std::cout << "IDENTIFIED" << std::endl;
-#endif
-            std::string initStr(line);
-            if (SimpleParser::parse(initStr,std::string("init"),trackSensAngle[index],19)==false)
-            {
-            	for (int i = 0; i < 19; ++i) {
-            		trackSensAngle[index][i] = -90 + 10.0*i;
-                    std::cout << "trackSensAngle[" << i << "] " << trackSensAngle[index][i] << std::endl;
-				}
-            }
-            char line[UDP_MSGLEN];
-            sprintf(line,"***identified***");
-            // Sending the car state to the client
-            if (sendto(listenSocket[index], line, strlen(line) + 1, 0,
-                       (struct sockaddr *) &clientAddress[index],
-                       sizeof(clientAddress[index])) < 0)
-                std::cerr << "Error: cannot send identification message";
-            identified=true;
-        }
-    }
-
+    
+    
 	focusSens[index] = new Sensors(car, 5);//ML
 	for (int i = 0; i < 5; ++i) {//ML
 		focusSens[index]->setSensor(i,(car->_focusCmd)+i-2.0,200);//ML
@@ -311,10 +259,7 @@ newrace(int index, tCarElt* car, tSituation *s)
     trackSens[index] = new Sensors(car, 19);
     for (int i = 0; i < 19; ++i) {
     	trackSens[index]->setSensor(i,trackSensAngle[index][i],__SENSORS_RANGE__);
-#ifdef __UDP_SERVER_VERBOSE__
-    	std::cout << "Set Track Sensors " << i+1 << " at angle " << trackSensAngle[index][i] << std::endl;
-#endif
-	}
+    }
     // Initialization of opponents sensors
     oppSens[index] = new ObstacleSensors(36, curTrack, car, s, (int) __SENSORS_RANGE__);
 
@@ -325,7 +270,8 @@ newrace(int index, tCarElt* car, tSituation *s)
 static void
 drive(int index, tCarElt* car, tSituation *s)
 {
-
+    // printf("%s","123123");
+    
     total_tics[index]++;
 
 #ifdef __PRINT_RACE_RESULTS__
@@ -334,7 +280,7 @@ drive(int index, tCarElt* car, tSituation *s)
     totalTime[index]=car->_timeBehindLeader;
 #endif
 
-#ifdef __DISABLE_RESTART__
+
     if (RESTARTING[index]==1)
     {
 
@@ -343,46 +289,10 @@ drive(int index, tCarElt* car, tSituation *s)
 
         // Set line to all zeroes
         memset(line, 0x0, 101);
-        if (recvfrom(listenSocket[index], line, 100, 0,
-                     (struct sockaddr *) &clientAddress[index],
-                     &clientAddressLength[index]) < 0)
-        {
-            std::cerr << "Error: problem in receiving from the listen socket";
-            exit(1);
-        }
-
-#ifdef __UDP_SERVER_VERBOSE__
-        // show the client's IP address
-        std::cout << "  from " << inet_ntoa(clientAddress[index].sin_addr);
-
-        // show the client's port number.
-        std::cout << ":" << ntohs(clientAddress[index].sin_port) << "\n";
-
-        // Show the line
-        std::cout << "  Received: " << line << "\n";
-#endif
-
-        // compare received string with the ID
-        if (strncmp(line,UDP_ID,3)==0)
-        {
-#ifdef __UDP_SERVER_VERBOSE__
-            std::cout << "IDENTIFIED" << std::endl;
-#endif
-            char line[UDP_MSGLEN];
-            sprintf(line,"***identified***");
-            // Sending the car state to the client
-            if (sendto(listenSocket[index], line, strlen(line) + 1, 0,
-                       (struct sockaddr *) &clientAddress[index],
-                       sizeof(clientAddress[index])) < 0)
-                std::cerr << "Error: cannot send identification message";
-		RESTARTING[index]=0;
-        }
     }
-#endif
-
     // local variables for UDP
-    struct timeval timeVal;
-    fd_set readSet;
+    // struct timeval timeVal
+    // fd_set readSet;z
 
     // computing distance to middle
     float dist_to_middle = 2*car->_trkPos.toMiddle/(car->_trkPos.seg->width);
@@ -436,7 +346,7 @@ drive(int index, tCarElt* car, tSituation *s)
 			focusSensorOut[i] = -1;
 		}
     }
-
+    
     // update the value of opponent sensors
     float oppSensorOut[36];
     oppSens[index]->sensors_update(s);
@@ -474,145 +384,71 @@ drive(int index, tCarElt* car, tSituation *s)
      ****************** Building state string *****************************
      **********************************************************************/
 
-    string stateString;
+    // string stateString;
 
-    stateString =  SimpleParser::stringify("angle", angle);
-    stateString += SimpleParser::stringify("curLapTime", float(car->_curLapTime));
-    if (getDamageLimit())
-	    stateString += SimpleParser::stringify("damage", car->_dammage);
-    else
-	    stateString += SimpleParser::stringify("damage", car->_fakeDammage);
-    stateString += SimpleParser::stringify("distFromStart", car->race.distFromStartLine);
-    stateString += SimpleParser::stringify("distRaced", distRaced[index]);
-    stateString += SimpleParser::stringify("fuel", car->_fuel);
-    stateString += SimpleParser::stringify("gear", car->_gear);
-    stateString += SimpleParser::stringify("lastLapTime", float(car->_lastLapTime));
-    stateString += SimpleParser::stringify("opponents", oppSensorOut, 36);
-    stateString += SimpleParser::stringify("racePos", car->race.pos);
-    stateString += SimpleParser::stringify("rpm", car->_enginerpm*10);
-    stateString += SimpleParser::stringify("speedX", float(car->_speed_x  * 3.6));
-    stateString += SimpleParser::stringify("speedY", float(car->_speed_y  * 3.6));
-    stateString += SimpleParser::stringify("speedZ", float(car->_speed_z  * 3.6));
-    stateString += SimpleParser::stringify("track", trackSensorOut, 19);
-    stateString += SimpleParser::stringify("trackPos", dist_to_middle);
-    stateString += SimpleParser::stringify("wheelSpinVel", wheelSpinVel, 4);
-    stateString += SimpleParser::stringify("z", car->_pos_Z  - RtTrackHeightL(&(car->_trkPos)));
-	stateString += SimpleParser::stringify("focus", focusSensorOut, 5);//ML
-
-    char line[UDP_MSGLEN];
-    sprintf(line,"%s",stateString.c_str());
-
-if (RESTARTING[index]==0)
-{
-#ifdef __UDP_SERVER_VERBOSE__
-
-    std::cout << "Sending: " << line << std::endl;
-#endif
-
-#ifdef __STEP_LIMIT__
+    // stateString =  SimpleParser::stringify("angle", angle);
+    // stateString += SimpleParser::stringify("curLapTime", float(car->_curLapTime));
+    // if (getDamageLimit())
+	//     stateString += SimpleParser::stringify("damage", car->_dammage);
+    // else
+	//     stateString += SimpleParser::stringify("damage", car->_fakeDammage);
+    // stateString += SimpleParser::stringify("distFromStart", car->race.distFromStartLine);
+    // stateString += SimpleParser::stringify("distRaced", distRaced[index]);
+    // stateString += SimpleParser::stringify("fuel", car->_fuel);
+    // stateString += SimpleParser::stringify("gear", car->_gear);
+    // stateString += SimpleParser::stringify("lastLapTime", float(car->_lastLapTime));
+    // stateString += SimpleParser::stringify("opponents", oppSensorOut, 36);
+    // stateString += SimpleParser::stringify("racePos", car->race.pos);
+    // stateString += SimpleParser::stringify("rpm", car->_enginerpm*10);
+    // stateString += SimpleParser::stringify("speedX", float(car->_speed_x  * 3.6));
+    // stateString += SimpleParser::stringify("speedY", float(car->_speed_y  * 3.6));
+    // stateString += SimpleParser::stringify("speedZ", float(car->_speed_z  * 3.6));
+    // stateString += SimpleParser::stringify("track", trackSensorOut, 19);
+    // stateString += SimpleParser::stringify("trackPos", dist_to_middle);
+    // stateString += SimpleParser::stringify("wheelSpinVel", wheelSpinVel, 4);
+    // stateString += SimpleParser::stringify("z", car->_pos_Z  - RtTrackHeightL(&(car->_trkPos)));
+	// stateString += SimpleParser::stringify("focus", focusSensorOut, 5);//ML
+    // for(int j = 0 ;j < 19 ; j++){
+    //     printf("aaa   %f  ",trackSensorOut[j]);
+    // }
+    if (is_sim_dqn_main){
+        *is_ready_dqn_main = false;
+        *angle_dqn_main = angle / 3.1416;
+        for(int j = 0 ;j < 19 ; j++)
+            track_dqn_main[j] = trackSensorOut[j] / 200.0;
+        *track_pos_dqn_main = dist_to_middle;
+        *speed_x_dqn_main = car->_speed_x  * 3.6 / 300.0;
+        *speed_y_dqn_main = car->_speed_y  * 3.6 / 300.0;
+        *speed_z_dqn_main = car->_speed_z  * 3.6 / 300.0;
+        for(int j = 0 ;j < 4 ; j++)
+            wheel_dqn_main[j] = wheelSpinVel[j]/100.0;
+        *rpm_dqn_main = car->_enginerpm / 1000;
     
-    if (total_tics[index]>__STEP_LIMIT__)
-    {
-	RESTARTING[index] = 1;
-	car->RESTART=1;
-
-	char fileName[200];
-	sprintf(fileName,"%s.txt",trackName);
-	printf("%s.txt\n",trackName);
-	FILE *f = fopen (fileName,"a");
-
-	printf("Dist_raced %lf\n",distRaced[index]);
-	fprintf(f,"Dist_raced %lf\n",distRaced[index]);
-
-	fclose(f);
-	return;
+        *is_ready_dqn_main = true;    
+        is_sim_dqn_main = false;
     }
-#endif
-	
+    
+    // while(!*is_ready_dqn_main);
+    // sprintf(line,"%s",stateString.c_str());
 
-    // Sending the car state to the client
-    if (sendto(listenSocket[index], line, strlen(line) + 1, 0,
-               (struct sockaddr *) &clientAddress[index],
-               sizeof(clientAddress[index])) < 0)
-        std::cerr << "Error: cannot send car state";
+    //     car->_accelCmd = oldAccel[index];
+    //     car->_brakeCmd = oldBrake[index];
+    //     car->_gearCmd  = oldGear[index];
+    //     car->_steerCmd = oldSteer[index];
+    //     car->_clutchCmd = oldClutch[index];
 
-
-    // Set timeout for client answer
-    FD_ZERO(&readSet);
-    FD_SET(listenSocket[index], &readSet);
-    timeVal.tv_sec = 0;
-    timeVal.tv_usec = UDP_TIMEOUT;
-    memset(line, 0x0,1000 );
-
-    if (select(listenSocket[index]+1, &readSet, NULL, NULL, &timeVal))
-    {
-        // Read the client controller action
-        memset(line, 0x0,UDP_MSGLEN );  // Zero out the buffer.
-        int numRead = recv(listenSocket[index], line, UDP_MSGLEN, 0);
-        if (numRead < 0)
-        {
-            std::cerr << "Error, cannot get any response from the client!";
-			CLOSE(listenSocket[index]);
-            exit(1);
-        }
-
-#ifdef __UDP_SERVER_VERBOSE__
-        std::cout << "Received: " << line << std::endl;
-#endif
-
-        std::string lineStr(line);
-        CarControl carCtrl(lineStr);
-        if (carCtrl.getMeta()==RACE_RESTART)
-        {
-         	RESTARTING[index] = 1;
-#ifdef __DISABLE_RESTART__
-	        char line[UDP_MSGLEN];
-        	sprintf(line,"***restart***");
-        	// Sending the car state to the client
-        	if (sendto(listenSocket[index], line, strlen(line) + 1, 0,
-                	   (struct sockaddr *) &clientAddress[index],
-                   	sizeof(clientAddress[index])) < 0)
-            	std::cerr << "Error: cannot send restart message";
-#else
-        car->RESTART=1;
-#endif
-        }
-
-        // Set controls command and store them in variables
-        oldAccel[index] = car->_accelCmd = carCtrl.getAccel();
-        oldBrake[index] = car->_brakeCmd = carCtrl.getBrake();
-        oldGear[index]  = car->_gearCmd  = carCtrl.getGear();
-        oldSteer[index] = car->_steerCmd = carCtrl.getSteer();
-        oldClutch[index] = car->_clutchCmd = carCtrl.getClutch();
-
-		oldFocus[index] = car->_focusCmd = carCtrl.getFocus();//ML
+    // 	car->_focusCmd = oldFocus[index];//ML
+    car->_steerCmd = *psteer_main_write;
+	car->_brakeCmd = *pbrake_main_write;
+	car->_accelCmd =*paccel_main_write;
+	car->_gearCmd = *pgear_main_write ;
+	car->_clutchCmd = *pclutch_main_write;
+	if(*pis_restart_main_write){	
+		car->ctrl.askRestart = true;
+        *pis_restart_main_write = false;
+        *is_ready_dqn_main = false;
     }
-    else
-    {
-//#ifdef __UDP_SERVER_VERBOSE__
-        std::cout << "Timeout for client answer\n";
-//#endif
 
-        // If no new controls are availables uses old ones...
-        car->_accelCmd = oldAccel[index];
-        car->_brakeCmd = oldBrake[index];
-        car->_gearCmd  = oldGear[index];
-        car->_steerCmd = oldSteer[index];
-        car->_clutchCmd = oldClutch[index];
-
-		car->_focusCmd = oldFocus[index];//ML
-    }
-}
-else
-{
-        car->_accelCmd = oldAccel[index];
-        car->_brakeCmd = oldBrake[index];
-        car->_gearCmd  = oldGear[index];
-        car->_steerCmd = oldSteer[index];
-        car->_clutchCmd = oldClutch[index];
-
-		car->_focusCmd = oldFocus[index];//ML
-}
 }
 
 /* End of the current race */

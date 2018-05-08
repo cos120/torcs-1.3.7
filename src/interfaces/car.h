@@ -350,7 +350,7 @@ typedef struct {
     int		raceCmd;    /**< command issued by the driver */
     int     focusCmd;//ML Requested focus angle
     tdble   focusCD;//ML Remaining CoolDown: the point in time when focus sensors can be read again
-
+    int     askRestart;    /** boolean; 1 = robot asked to restart the race */
 #define RM_CMD_NONE		0	/**< No race command */
 #define RM_CMD_PIT_ASKED	1	/**< Race command: Pit asked */
     char	msg[4][32];     /**< 4 lines of 31 characters 0-1 from car 2-3 from race engine */

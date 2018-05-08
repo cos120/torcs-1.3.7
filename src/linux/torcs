@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-prefix=/usr/local
+prefix=/home/bst2017/zj/software/bin
 exec_prefix=${prefix}
 
 BINDIR=${exec_prefix}/bin
