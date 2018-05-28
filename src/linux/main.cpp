@@ -36,7 +36,7 @@
 
 
 extern bool bKeepModules;
-int key;
+int key = 1234;
 static void
 init_args(int argc, char **argv, const char **raceconfig)
 {
@@ -215,7 +215,8 @@ struct shared_use_st
 	bool is_stuck;
 	struct env_to_read_29 env_read_29;
 	bool dqn_ready;
-	
+    char map_name[100];	
+    char map_ok;	
 };
 
 int* pwritten = NULL;
@@ -249,7 +250,8 @@ double* prpm_main_read = NULL;
 double* ptrack_radius_main_read = NULL;
 bool* pis_ready_main_read = NULL;
 bool* pis_stuck_main_read = NULL;
-
+char* pmap_name = NULL;
+char* pmap_ok = NULL;
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 float* angle_dqn_main = NULL;
 float* track_dqn_main = NULL;
@@ -426,7 +428,8 @@ main(int argc, char *argv[])
     racePos_main = &(shared->env_read_29.racePos);
     gear_main = &(shared->env_read_29.gear);
     z_main = &(shared->env_read_29.z);
-
+    pmap_name = shared->map_name;
+    pmap_ok = &(shared->map_ok);
 	printf("pis_restart_main_write:%p\n",(void*)pis_restart_main_write);
 
 

@@ -762,15 +762,17 @@ extern uint8_t* pdata;
 extern int* ppause;
 extern int* pzmq_flag;
 extern int* psave_flag;
+extern int key;
 
+int key_local = 0;
 
-
-
+extern char* pmap_ok;
 
 static void
 ReOneStep(double deltaTimeIncrement)
 {
 	if(pis_restart_write == NULL){
+        key_local = key;
 		pis_restart_write = pis_restart_main_write;
 		psteer_write = psteer_main_write;
 		pbrake_write = pbrake_main_write;
@@ -829,10 +831,11 @@ ReOneStep(double deltaTimeIncrement)
 	if (*ppause == 1) 
 	{ 
 		count++;
-		if (count>50) // 10FPS
+		if (count>150) // 50 -> 10FPS
+		//if (count>50) // 50 -> 10FPS
 		{
 			count=1;
-			
+		    //printf("key: %d\n",key);	
 			glReadPixels(0, 0, image_width, image_height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)pdata);
 
 			*pwritten=1;
@@ -844,7 +847,8 @@ ReOneStep(double deltaTimeIncrement)
     }
 
  
-	//zj
+	// INFO zj modify 
+    // remove start count
 	// if ((ReInfo->_displayMode != RM_DISP_MODE_NONE) && (ReInfo->_displayMode != RM_DISP_MODE_CONSOLE)) {
 	// 	if (floor(s->currentTime) == -2.0) {
 	// 		ReRaceBigMsgSet("Ready", 1.0);
@@ -977,10 +981,16 @@ ReOneStep(double deltaTimeIncrement)
 		}
    
     if(restartRequested){   
+        *is_ready_dqn_main = false;
 		stuck_count = 0;
 		out_track_count = 0;
         ReRaceCleanup();
-        ReInfo->_reState = RE_STATE_PRE_RACE;
+        if (*pmap_ok == '1'){
+            ReInfo->_reState = RE_STATE_EVENT_INIT;
+            *pmap_ok = '0';
+        }else{
+            ReInfo->_reState = RE_STATE_PRE_RACE;
+        }
         GfuiScreenActivate(ReInfo->_reGameScreen);
 
     }

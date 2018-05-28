@@ -46,9 +46,8 @@
 #include "raceresults.h"
 
 #include "raceinit.h"
-
+#include <iostream>
 static const char *level_str[] = { ROB_VAL_ROOKIE, ROB_VAL_AMATEUR, ROB_VAL_SEMI_PRO, ROB_VAL_PRO };
-
 static tModList *reEventModList = 0;
 tModList *ReRaceModList = 0;
 
@@ -792,6 +791,8 @@ reDumpTrack(tTrack *track, int verbose)
     @return	<tt>0 ... </tt>Ok<br>
 		<tt>-1 .. </tt>Error
 */
+extern char* pmap_name;
+extern char* pmap_ok;
 int
 ReInitTrack(void)
 {
@@ -801,7 +802,6 @@ ReInitTrack(void)
 	const int BUFSIZE = 1024;
 	char buf[BUFSIZE];
 
-	
 	curTrkIdx = (int)GfParmGetNum(results, RE_SECT_CURRENT, RE_ATTR_CUR_TRACK, NULL, 1);
 	snprintf(buf, BUFSIZE, "%s/%d", RM_SECT_TRACKS, curTrkIdx);
 	const char* trackName = GfParmGetStr(params, buf, RM_ATTR_NAME, 0);
@@ -809,12 +809,29 @@ ReInitTrack(void)
 
 	const char* catName = GfParmGetStr(params, buf, RM_ATTR_CATEGORY, 0);
 	if (!catName) return -1;
-	
 	snprintf(buf, BUFSIZE, "Loading Track %s...", trackName);
 	RmLoadingScreenSetText(buf);
 	snprintf(buf, BUFSIZE, "tracks/%s/%s/%s.%s", catName, trackName, trackName, TRKEXT);
-	ReInfo->track = ReInfo->_reTrackItf.trkBuild(buf);
-	reDumpTrack(ReInfo->track, 0);
+    
+	//ReInfo->track = ReInfo->_reTrackItf.trkBuild(buf);
+    //std::cout<<"map  "<<pmap_name<<std::endl;
+    //if (*pmap_ok == '1'){
+    //    myfile<<buf<<"\t"<<catName<<"\t"<<trackName<<std::endl;
+    //    myfile.close();
+    //    *pmap_ok = '0';
+    //} 
+    if (*pmap_name){
+        std::cout<<"map  "<<pmap_name<<std::endl;
+        ReInfo->track = ReInfo->_reTrackItf.trkBuild(pmap_name);
+        //ReInfo->track = ReInfo->_reTrackItf.trkBuild("cks/e-track-1/e-track-1.xml");
+    } else{
+        ReInfo->track = ReInfo->_reTrackItf.trkBuild(buf);
+    }
+    //ReInfo->track = ReInfo->_reTrackItf.trkBuild(buf);
+    //std::cout<<"buf  "<<buf<<std::endl;
+    //std::cout<<"catName  "<<catName<<std::endl;
+    //std::cout<<"trackName  "<<trackName<<std::endl;
+    reDumpTrack(ReInfo->track, 0);
 	
 	return 0;
 }
