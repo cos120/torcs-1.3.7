@@ -80,9 +80,16 @@ static void rmtsDeactivate(void *screen)
 	}
 }
 
-
+// INFO zj modify
+// uncomment to get tracks from games,
+// you should change track.txt to be writable first
+//#include <fstream>
+//#include <iostream>
 static void rmUpdateTrackInfo(void)
 {
+    //std::ofstream myfile;
+    //myfile.open("/home/bst2017/zj/library/python/TorcsTool/track.txt", std::ios_base::app);
+
 	void *trackHandle;
 	float tmp;
 	tTrack *trk;
@@ -97,6 +104,9 @@ static void rmUpdateTrackInfo(void)
 		GfTrace("File %s has pb\n", buf);
 		return;
 	}
+    //myfile<<buf<<"\t"<<CategoryList->name<<"\t"<<((tFList*)CategoryList->userData)->name<<std::endl;
+    //myfile.close();
+    
 	trk = ts->trackItf.trkBuild(buf);
 
 	GfuiLabelSetText(scrHandle, DescId, GfParmGetStr(trackHandle, TRK_SECT_HDR, TRK_ATT_DESCR, ""));
