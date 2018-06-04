@@ -97,6 +97,10 @@ static void rmdsSetFocus(void * /* dummy */)
 }
 
 
+// INFO zj changed
+// get all drivers names
+#include <iostream>
+#include <fstream>
 static void rmdsSelect(void * /* dummy */)
 {
 	char *name;
@@ -116,6 +120,7 @@ static void rmdsSelect(void * /* dummy */)
 		GfParmSetStr(ds->param, buf, RM_ATTR_MODULE, curDrv->dname);
 		index++;
 		name = GfuiScrollListExtractElement(scrHandle, selectedScrollList, 0, (void**)&curDrv);
+        std::cout<<"Name :" << name<<std::endl;
 	}
 	
 	rmdsDeactivate(ds->nextScreen);
@@ -181,7 +186,6 @@ static void rmSelectDeselect(void * /* dummy */ )
 			nbSelectedDrivers++;
 		}
 	}
-
 	if (!name) {
 		sel = 1;
 		src = selectedScrollList;

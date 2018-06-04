@@ -40,12 +40,14 @@
 #include "raceengine.h"
 
 
+#include "get_sensors.h"
 #include <iostream>
 #include <cstdio>
 #include <ctime>
 #define image_width 640
 #define image_height 480
 #define PI 3.1415926
+get_sensors* sensor;
 static double	msgDisp;
 static double	bigMsgDisp;
 //zj
@@ -831,11 +833,11 @@ ReOneStep(double deltaTimeIncrement)
 	if (*ppause == 1) 
 	{ 
 		count++;
+        //printf("count: %d\n",count);	
 		if (count>150) // 50 -> 10FPS
-		//if (count>50) // 50 -> 10FPS
 		{
 			count=1;
-		    //printf("key: %d\n",key);	
+		    //printf("key: %d\n",count);	
 			glReadPixels(0, 0, image_width, image_height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)pdata);
 
 			*pwritten=1;
@@ -920,6 +922,8 @@ ReOneStep(double deltaTimeIncrement)
 
 		*ptrack_radius_main_read = car->_trkPos.seg->radius;
 
+		printf("left: %f \n",car->_trkPos.toLeft);
+		printf("right: %f \n",car->_trkPos.toRight);
 		if(car->_laps == s->_totLaps){
 			if(car->_distFromStartLine / ReInfo->track->length > 0.99){
 				*pis_finish_main_read = true;
@@ -970,6 +974,7 @@ ReOneStep(double deltaTimeIncrement)
 		ReRaceMsgUpdate();
 	}
 
+    sensor->set_sensor();
 
 	bool restartRequested = false;
 	for (i = 0; i < s->_ncars; i++) {
@@ -1002,6 +1007,7 @@ ReOneStep(double deltaTimeIncrement)
 void
 ReStart(void)
 {
+    sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[0],ReInfo->s);
     ReInfo->_reRunning = 1;
     ReInfo->_reCurTime = GfTimeClock() - RCM_MAX_DT_SIMU;
 }
