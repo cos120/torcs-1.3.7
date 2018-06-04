@@ -99,7 +99,9 @@ endef
 
 
 OB1 = $(SOURCES:.cpp=.o)
-OBJECTS = $(OB1:.c=.o)
+OB2 = $(CUSTOMSRC:.cpp=.o)
+OBJECTS := $(OB1:.c=.o) $(OB2:.c=.o)
+#OBJECTS = $(OB1:.c=.o)
 
 define recursedirs
 for Dir in $$RecurseDirs ;\
@@ -237,7 +239,7 @@ specfiles: installspecfiles specfilesdirs
 .SUFFIXES: .cpp
 
 .cpp.o:
-	${CXX} $(INCFLAGS) $(CXXFLAGS) $(COMPILFLAGS) -c $<
+	${CXX} $(INCFLAGS) $(CXXFLAGS) $(COMPILFLAGS) $(CUSTOM_SRC) -c $<
 
 .SUFFIXES: .c
 
@@ -477,7 +479,10 @@ endif
 
 ifdef SOLIBRARY
 
+$(warning  $(OBJECTS))
 ${SOLIBRARY}: ${OBJECTS}
+	$(warning  "123")
+	$(warning  $(OBJECTS))
 	${CXX} -shared -o ${SOLIBRARY} ${OBJECTS} ${SOLIBS} ${LDFLAGS} ${LIBSPATH} ${LIBS} ${DEBUG_LIBS}
 	@D=`pwd` ; \
 	createdir="${EXPORTBASE}/lib" ; \
@@ -509,6 +514,7 @@ endif
 ifdef MODULE
 
 ${MODULE}: ${OBJECTS}
+	$(warning  "123123213")
 	${CXX} -shared -o ${MODULE} ${OBJECTS} ${LDFLAGS} ${LIBSPATH} ${LIBS} 
 	@D=`pwd` ; \
 	createdir="${EXPORTBASE}/${MODULEDIR}" ; \

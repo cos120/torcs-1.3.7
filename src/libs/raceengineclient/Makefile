@@ -20,8 +20,11 @@ SOLIBRARY    = libraceengine.so
 
 SOLIBDIR     = .
 
+#CUSTOMSRC	= ../../../custom/custom_source/get_sensors.cpp
+
 SOURCES      = singleplayer.cpp raceinit.cpp racemain.cpp racemanmenu.cpp racestate.cpp racegl.cpp \
-	       raceengine.cpp raceresults.cpp
+	        raceengine.cpp raceresults.cpp CarControl.cpp  get_sensors.cpp   ObstacleSensors.cpp  sensors.cpp  SimpleParser.cpp
+
 
 SOLIBS      = -lracescreens -lrobottools
 

@@ -20,7 +20,7 @@
 
 #include "berniw.h"
 #include <portability.h>
-
+//#include <sensors.h>
 #ifdef DMALLOC
 #include "dmalloc.h"
 #endif
