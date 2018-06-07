@@ -151,7 +151,9 @@ void get_sensors::set_sensor(){
         *racePos_main = curCar->race.pos;
         *gear_main = curCar->_gear;
         *z_main = curCar->_pos_Z - RtTrackHeightL(&(curCar->_trkPos));
-    
+        *toleft_main = curCar->_trkPos.toLeft;
+        *toright_main = curCar->_trkPos.toRight;
+        *radius_main = curCar->_trkPos.seg->radius;
         *is_ready_dqn_main = true;    
         is_sim_dqn_main = false;
     }

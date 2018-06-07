@@ -189,6 +189,9 @@ struct env_to_read_29{
     int racePos;
     int gear;
     float z;
+    float toleft;
+    float toright;
+    float radius;
 };
 struct env_to_write{
 
@@ -272,6 +275,9 @@ float* fuel_main = NULL;
 int* racePos_main = NULL;
 int* gear_main = NULL;
 float* z_main = NULL;
+float* toleft_main = NULL;
+float* toright_main = NULL;
+float* radius_main = NULL;
 
 bool* is_ready_dqn_main = NULL;
 bool is_sim_dqn_main = true;
@@ -364,6 +370,9 @@ main(int argc, char *argv[])
 	shared->env_read_29.racePos = 0;
 	shared->env_read_29.gear = 0;
 	shared->env_read_29.z = 0;
+	shared->env_read_29.toleft = 0;
+	shared->env_read_29.toright = 0;
+	shared->env_read_29.radius = 0;
 	shared->dqn_ready = false;
 	is_sim_dqn_main = true;
 	
@@ -428,6 +437,9 @@ main(int argc, char *argv[])
     racePos_main = &(shared->env_read_29.racePos);
     gear_main = &(shared->env_read_29.gear);
     z_main = &(shared->env_read_29.z);
+    toleft_main = &(shared->env_read_29.toleft);
+    toright_main = &(shared->env_read_29.toright);
+    radius_main = &(shared->env_read_29.radius);
     pmap_name = shared->map_name;
     pmap_ok = &(shared->map_ok);
 	printf("pis_restart_main_write:%p\n",(void*)pis_restart_main_write);
