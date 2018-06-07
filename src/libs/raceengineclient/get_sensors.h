@@ -83,6 +83,9 @@ extern float* fuel_main;
 extern int* racePos_main;
 extern int* gear_main;
 extern float* z_main;
+extern float* toleft_main;
+extern float* toright_main;
+extern float* radius_main;
 
 extern bool* pis_restart_main_write;
 extern double* psteer_main_write;

@@ -834,7 +834,7 @@ ReOneStep(double deltaTimeIncrement)
 	{ 
 		count++;
         //printf("count: %d\n",count);	
-		if (count>150) // 50 -> 10FPS
+		if (count>50) // 50 -> 10FPS
 		{
 			count=1;
 		    //printf("key: %d\n",count);	
@@ -884,6 +884,7 @@ ReOneStep(double deltaTimeIncrement)
 		}
 		ReInfo->_reLastTime = s->currentTime;
 	}
+    ReInfo->track->pits.speedLimit = 100;
 	STOP_PROFILE("rbDrive*");
 	// std::clock_t start;
     // double duration;
@@ -922,10 +923,10 @@ ReOneStep(double deltaTimeIncrement)
 
 		*ptrack_radius_main_read = car->_trkPos.seg->radius;
 
-		printf("left: %f \n",car->_trkPos.toLeft);
-		printf("right: %f \n",car->_trkPos.toRight);
+		//printf("left: %f \n",car->_trkPos.toLeft);
+		//printf("right: %f \n",car->_trkPos.toRight);
 		if(car->_laps == s->_totLaps){
-			if(car->_distFromStartLine / ReInfo->track->length > 0.99){
+			if(car->_distFromStartLine / ReInfo->track->length > 0.9){
 				*pis_finish_main_read = true;
 				// printf("\n%s\n","finish 99% race");
 			}else{
@@ -985,6 +986,11 @@ ReOneStep(double deltaTimeIncrement)
 			}
 		}
    
+    //if (fabs(*ptrack_pos_main_read) > 1){
+    //    restartRequested = true;
+    //    *pis_stuck_main_read = false;
+    //    s->cars[i]->ctrl.askRestart = false;
+    //}
     if(restartRequested){   
         *is_ready_dqn_main = false;
 		stuck_count = 0;
