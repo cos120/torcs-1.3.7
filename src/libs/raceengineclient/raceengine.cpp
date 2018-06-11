@@ -999,9 +999,9 @@ ReOneStep(double deltaTimeIncrement)
         if (*pmap_ok == '1'){
             ReInfo->_reState = RE_STATE_EVENT_INIT;
             *pmap_ok = '0';
-        }else{
+        }else if(*pmap_ok == '0'){
             ReInfo->_reState = RE_STATE_PRE_RACE;
-        }
+        }else{}
         GfuiScreenActivate(ReInfo->_reGameScreen);
 
     }
@@ -1013,6 +1013,7 @@ ReOneStep(double deltaTimeIncrement)
 void
 ReStart(void)
 {
+    delete sensor;
     sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[0],ReInfo->s);
     ReInfo->_reRunning = 1;
     ReInfo->_reCurTime = GfTimeClock() - RCM_MAX_DT_SIMU;

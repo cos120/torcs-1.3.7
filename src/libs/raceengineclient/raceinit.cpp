@@ -821,8 +821,9 @@ ReInitTrack(void)
     //    *pmap_ok = '0';
     //} 
     if (*pmap_name){
-        std::cout<<"map  "<<pmap_name<<std::endl;
+        //std::cout<<"map  "<<pmap_name<<std::endl;
         ReInfo->track = ReInfo->_reTrackItf.trkBuild(pmap_name);
+        *pmap_name = '\0';
         //ReInfo->track = ReInfo->_reTrackItf.trkBuild("cks/e-track-1/e-track-1.xml");
     } else{
         ReInfo->track = ReInfo->_reTrackItf.trkBuild(buf);
