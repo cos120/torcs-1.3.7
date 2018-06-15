@@ -22,7 +22,7 @@ SHELL = /bin/bash
 srcdir = .
 top_srcdir = ${TORCS_BASE}
 
-prefix = /home/bst2017/zj/software/bin
+prefix = /home/zj/software
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -39,8 +39,7 @@ LD = ld
 AR = ar
 ARFLAGS = ruv
 RANLIB = ranlib
-#CUSTOM_TORCS_INC = ${TORCS_BASE}/custom/custom_include
-#CUSTOM_TORCS_LIB = ${TORCS_BASE}/custom/custom_lib
+
 INSTALL = /usr/bin/install -c
 #INSTALL_PROGRAM = /usr/bin/install -c -m 755
 #INSTALL_DATA = /usr/bin/install -c -m 644
@@ -59,7 +58,7 @@ EXT_LIBS = -lplibjs -lplibssgaux -lplibssg -lplibsm -lplibsl -lplibsg -lplibul -
 LDFLAGS =  -L${EXPORTBASE}/lib  -lopenal -lalut -lvorbisfile -L/usr/lib
 
 #INCFLAGS =  -I${EXPORTBASE}/include -I/usr/include -I/usr/local/include
-INCFLAGS =  -I${EXPORTBASE}/include -I${TORCS_BASE} -I/${CUSTOM_TORCS_INC}
+INCFLAGS =  -I${EXPORTBASE}/include -I${TORCS_BASE}
 
 CPP = gcc -E  -M -D__DEPEND__
 

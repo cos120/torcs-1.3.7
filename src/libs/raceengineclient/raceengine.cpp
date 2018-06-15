@@ -975,8 +975,11 @@ ReOneStep(double deltaTimeIncrement)
 		ReRaceMsgUpdate();
 	}
 
+    is_sim_dqn_main = true;	
+    //std::cout<<"is_dqn_before"<< *is_ready_dqn_main<<std::endl;
     sensor->set_sensor();
 
+    //std::cout<<"is_dqn_after"<< *is_ready_dqn_main<<std::endl;
 	bool restartRequested = false;
 	for (i = 0; i < s->_ncars; i++) {
 		if(s->cars[i]->ctrl.askRestart) {

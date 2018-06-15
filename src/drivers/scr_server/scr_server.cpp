@@ -290,7 +290,7 @@ static void
 drive(int index, tCarElt* car, tSituation *s)
 {
     // printf("%s","123123");
-    
+/*    
     total_tics[index]++;
 
 #ifdef __PRINT_RACE_RESULTS__
@@ -398,7 +398,8 @@ drive(int index, tCarElt* car, tSituation *s)
     }
 
     distRaced[index] += curDistRaced;
-
+*/
+   
     /**********************************************************************
      ****************** Building state string *****************************
      **********************************************************************/
@@ -430,36 +431,36 @@ drive(int index, tCarElt* car, tSituation *s)
     // for(int j = 0 ;j < 19 ; j++){
     //     printf("aaa   %f  ",trackSensorOut[j]);
     // }
-    if (is_sim_dqn_main){
-        *is_ready_dqn_main = false;
-        *angle_dqn_main = angle;
-        for(int j = 0 ;j < 19 ; j++)
-            track_dqn_main[j] = trackSensorOut[j];
-        for(int j = 0 ;j < 36 ; j++)
-            opponents_main[j] = oppSensorOut[j];
-        for(int j = 0 ;j < 5 ; j++)
-            focus_main[j] = focusSensorOut[j];
-        *track_pos_dqn_main = dist_to_middle;
-        *speed_x_dqn_main = car->_speed_x  * 3.6;
-        *speed_y_dqn_main = car->_speed_y  * 3.6;
-        *speed_z_dqn_main = car->_speed_z  * 3.6;
-        for(int j = 0 ;j < 4 ; j++)
-            wheel_dqn_main[j] = wheelSpinVel[j];
-        *rpm_dqn_main = car->_enginerpm * 10;
+    //if (is_sim_dqn_main){
+    //    *is_ready_dqn_main = false;
+    //    *angle_dqn_main = angle;
+    //    for(int j = 0 ;j < 19 ; j++)
+    //        track_dqn_main[j] = trackSensorOut[j];
+    //    for(int j = 0 ;j < 36 ; j++)
+    //        opponents_main[j] = oppSensorOut[j];
+    //    for(int j = 0 ;j < 5 ; j++)
+    //        focus_main[j] = focusSensorOut[j];
+    //    *track_pos_dqn_main = dist_to_middle;
+    //    *speed_x_dqn_main = car->_speed_x  * 3.6;
+    //    *speed_y_dqn_main = car->_speed_y  * 3.6;
+    //    *speed_z_dqn_main = car->_speed_z  * 3.6;
+    //    for(int j = 0 ;j < 4 ; j++)
+    //        wheel_dqn_main[j] = wheelSpinVel[j];
+    //    *rpm_dqn_main = car->_enginerpm * 10;
 
-        *damage_main = car->_dammage;
-        *curLapTime_main = car->_curLapTime;
-        *lastLapTime_main = car->_lastLapTime;
-        *distFromStart_main = car->race.distFromStartLine;
-        *distRaced_main = distRaced[index];
-        *fuel_main = car->_fuel;
-        *racePos_main = car->race.pos;
-        *gear_main = car->_gear;
-        *z_main = car->_pos_Z - RtTrackHeightL(&(car->_trkPos));
-    
-        *is_ready_dqn_main = true;    
-        is_sim_dqn_main = false;
-    }
+    //    *damage_main = car->_dammage;
+    //    *curLapTime_main = car->_curLapTime;
+    //    *lastLapTime_main = car->_lastLapTime;
+    //    *distFromStart_main = car->race.distFromStartLine;
+    //    *distRaced_main = distRaced[index];
+    //    *fuel_main = car->_fuel;
+    //    *racePos_main = car->race.pos;
+    //    *gear_main = car->_gear;
+    //    *z_main = car->_pos_Z - RtTrackHeightL(&(car->_trkPos));
+    //
+    //    *is_ready_dqn_main = true;    
+    //    is_sim_dqn_main = false;
+    //}
     
     // while(!*is_ready_dqn_main);
     // sprintf(line,"%s",stateString.c_str());

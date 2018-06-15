@@ -125,7 +125,7 @@ void get_sensors::set_sensor(){
 
     distRaced += curDistRaced;
 
-    if (is_sim_dqn_main){
+    //if (is_sim_dqn_main){
         *is_ready_dqn_main = false;
         *angle_dqn_main = angle;
         for(int j = 0 ;j < 19 ; j++)
@@ -155,8 +155,8 @@ void get_sensors::set_sensor(){
         *toright_main = curCar->_trkPos.toRight;
         *radius_main = curCar->_trkPos.seg->radius;
         *is_ready_dqn_main = true;    
-        is_sim_dqn_main = false;
-    }
+        //is_sim_dqn_main = false;
+    //}
     if(*pis_restart_main_write){	
         curCar->ctrl.askRestart = true;
         *pis_restart_main_write = false;
