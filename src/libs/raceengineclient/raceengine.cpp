@@ -72,7 +72,7 @@ extern bool* pis_finish_main_read;
 extern double* ptrack_pos_main_read;
 extern double* prpm_main_read;
 extern bool* pis_stuck_main_read;
-
+extern float* pset_speed_main;
 double* ptrack_radius_main_read;
 bool* pis_ready_main_read;
 
@@ -767,13 +767,14 @@ extern int* psave_flag;
 extern int key;
 
 int key_local = 0;
-
+int tina_index = -1;
 extern char* pmap_ok;
-
+#include <string.h>
 static void
 ReOneStep(double deltaTimeIncrement)
 {
 	if(pis_restart_write == NULL){
+        *pset_speed_main = 100;
         key_local = key;
 		pis_restart_write = pis_restart_main_write;
 		psteer_write = psteer_main_write;
@@ -834,7 +835,7 @@ ReOneStep(double deltaTimeIncrement)
 	{ 
 		count++;
         //printf("count: %d\n",count);	
-		if (count>50) // 50 -> 10FPS
+		if (count>150) // 50 -> 10FPS
 		{
 			count=1;
 		    //printf("key: %d\n",count);	
@@ -886,6 +887,19 @@ ReOneStep(double deltaTimeIncrement)
 	}
     ReInfo->track->pits.speedLimit = 100;
 	STOP_PROFILE("rbDrive*");
+    for (int i = 0; i < s->_ncars; i++) {
+        if(!strncmp(s->cars[i]->info.name,"tita 1",4)){
+            //tina_index = i;
+            s->cars[i]->_maxSpeedCmd = *pset_speed_main;
+            //std::cout<<"speed :" << *pset_speed_main << std::endl;
+            //std::cout << tina_index<<endl;
+            break;
+        }
+    }
+    //if (tina_index != -1){
+    //    s->cars[tina_index]->_maxSpeedCmd = *pset_speed_main;
+    //    std::cout<<"speed :" << *pset_speed_main << std::endl;
+    //}
 	// std::clock_t start;
     // double duration;
 
@@ -912,11 +926,15 @@ ReOneStep(double deltaTimeIncrement)
 		NORM_PI_PI(angle);
 		*ptrack_angle_main_read = angle;
 		
-		if (car->priv.simcollision & SEM_COLLISION_XYSCENE) {
+		//if (car->priv.simcollision & SEM_COLLISION_XYSCENE) {
+        //printf("%d\n",car->priv.simcollision);
+		if (car->priv.simcollision & SEM_COLLISION_CAR && !*pis_hit_wall_read) {
 			*pis_hit_wall_main_read = true;
-		}else{
-			*pis_hit_wall_main_read = false;
 		}
+        //std::cout << "hit: " << *pis_hit_wall_main_read <<std::endl;
+        //else{
+		//	*pis_hit_wall_main_read = false;
+		//}
 
 		*ptrack_pos_main_read = 2*car->_trkPos.toMiddle/(car->_trkPos.seg->width);
 		*prpm_main_read = car->_enginerpm * 10;

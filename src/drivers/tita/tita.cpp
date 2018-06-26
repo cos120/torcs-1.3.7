@@ -19,8 +19,12 @@
 
 
 #include "berniw.h"
-
-
+#include <random>
+#include <iostream>
+std::random_device rd;
+std::mt19937 mt(rd());
+std::uniform_real_distribution<float> dist(10,20);
+float max_speed = 0.0;
 // Function prototypes.
 static void initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSituation * situation);
 static void drive(int index, tCarElt* car, tSituation *situation);
@@ -163,6 +167,8 @@ static void newRace(int index, tCarElt* car, tSituation *situation)
 // Controls the car.
 static void drive(int index, tCarElt* car, tSituation *situation)
 {
+    max_speed = car->_maxSpeedCmd;
+    //std::cout<<"speed:123123 "<<max_speed<<std::endl;
 	tdble angle;
 	tdble brake;
 	tdble b1;							// Brake value in case we are to fast HERE and NOW.
@@ -457,6 +463,10 @@ static void drive(int index, tCarElt* car, tSituation *situation)
 
 	if (myc->tr_mode == 0) car->_steerCmd = steer;
 	car->_clutchCmd = getClutch(myc, car);
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

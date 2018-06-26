@@ -220,6 +220,7 @@ struct shared_use_st
 	bool dqn_ready;
     char map_name[100];	
     char map_ok;	
+    float set_speed_main;
 };
 
 int* pwritten = NULL;
@@ -282,6 +283,7 @@ float* radius_main = NULL;
 bool* is_ready_dqn_main = NULL;
 bool is_sim_dqn_main = true;
 
+float* pset_speed_main = NULL;
 void *shm = NULL;
 /*
  * Function
@@ -442,6 +444,7 @@ main(int argc, char *argv[])
     radius_main = &(shared->env_read_29.radius);
     pmap_name = shared->map_name;
     pmap_ok = &(shared->map_ok);
+    pset_speed_main = &(shared->set_speed_main);
 	printf("pis_restart_main_write:%p\n",(void*)pis_restart_main_write);
 
 

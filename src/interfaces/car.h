@@ -359,8 +359,10 @@ typedef struct {
     int		lightCmd;    /**< Lights command */
 #define RM_LIGHT_HEAD1		0x00000001	/**< head light 1 */
 #define RM_LIGHT_HEAD2		0x00000002	/**< head light 2 */
+    float   max_speed;
 } tCarCtrl;
 #define _steerCmd	ctrl.steer
+#define _maxSpeedCmd	ctrl.max_speed
 #define _accelCmd	ctrl.accelCmd
 #define _brakeCmd	ctrl.brakeCmd
 #define _clutchCmd	ctrl.clutchCmd
