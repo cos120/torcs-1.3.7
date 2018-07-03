@@ -767,7 +767,8 @@ extern int* psave_flag;
 extern int key;
 
 int key_local = 0;
-int tina_index = -1;
+int scr_index = -1;
+bool is_finish_lock = false;
 extern char* pmap_ok;
 #include <string.h>
 static void
@@ -878,6 +879,10 @@ ReOneStep(double deltaTimeIncrement)
 	if ((s->currentTime - ReInfo->_reLastTime) >= RCM_MAX_DT_ROBOTS) {
 		s->deltaTime = s->currentTime - ReInfo->_reLastTime;
 		for (i = 0; i < s->_ncars; i++) {
+
+            if(!strncmp(s->cars[i]->info.name,"scr_server 1",12)){
+                scr_index = i;
+            }
 			if ((s->cars[i]->_state & RM_CAR_STATE_NO_SIMU) == 0) {
 				robot = s->cars[i]->robot;
 				robot->rbDrive(robot->index, s->cars[i], s);
@@ -888,16 +893,16 @@ ReOneStep(double deltaTimeIncrement)
     ReInfo->track->pits.speedLimit = 100;
 	STOP_PROFILE("rbDrive*");
     for (int i = 0; i < s->_ncars; i++) {
-        if(!strncmp(s->cars[i]->info.name,"tita 1",4)){
-            //tina_index = i;
+        if(!strncmp(s->cars[i]->info.name,"tita",4)){
+            //scr_index = i;
             s->cars[i]->_maxSpeedCmd = *pset_speed_main;
             //std::cout<<"speed :" << *pset_speed_main << std::endl;
-            //std::cout << tina_index<<endl;
-            break;
+            //std::cout << scr_index<<endl;
+            //break;
         }
     }
-    //if (tina_index != -1){
-    //    s->cars[tina_index]->_maxSpeedCmd = *pset_speed_main;
+    //if (scr_index != -1){
+    //    s->cars[scr_index]->_maxSpeedCmd = *pset_speed_main;
     //    std::cout<<"speed :" << *pset_speed_main << std::endl;
     //}
 	// std::clock_t start;
@@ -912,7 +917,13 @@ ReOneStep(double deltaTimeIncrement)
 	//zj
 		is_sim_dqn_main = true;	
 		*pis_ready_main_read = false;
-		tCarElt* car = s->cars[0];
+        tCarElt* car;
+        if(scr_index == -1){
+            car = s->cars[0];
+        }else{
+            car = s->cars[scr_index];
+        }
+
 		*pspeed_x_main_read = car->_speed_x * 3.6;
 		*pspeed_y_main_read = car->_speed_y * 3.6;
 		*pspeed_z_main_read = car->_speed_z * 3.6;
@@ -928,9 +939,11 @@ ReOneStep(double deltaTimeIncrement)
 		
 		//if (car->priv.simcollision & SEM_COLLISION_XYSCENE) {
         //printf("%d\n",car->priv.simcollision);
-		if (car->priv.simcollision & SEM_COLLISION_CAR && !*pis_hit_wall_read) {
+		if (car->priv.simcollision & SEM_COLLISION_CAR && !*pis_hit_wall_main_read) {
 			*pis_hit_wall_main_read = true;
-		}
+		}else{
+			*pis_hit_wall_main_read = false;
+        }
         //std::cout << "hit: " << *pis_hit_wall_main_read <<std::endl;
         //else{
 		//	*pis_hit_wall_main_read = false;
@@ -943,14 +956,26 @@ ReOneStep(double deltaTimeIncrement)
 
 		//printf("left: %f \n",car->_trkPos.toLeft);
 		//printf("right: %f \n",car->_trkPos.toRight);
-		if(car->_laps == s->_totLaps){
-			if(car->_distFromStartLine / ReInfo->track->length > 0.9){
-				*pis_finish_main_read = true;
-				// printf("\n%s\n","finish 99% race");
-			}else{
-				*pis_finish_main_read = false;
-			}
-		}
+        // INFO if any car finish 90% of race, finish flag will be set.
+        for (int i = 0; i < s->_ncars; i++) {
+            tCarElt	*car = s->cars[i];
+		    if(car->_laps == s->_totLaps && !is_finish_lock){
+                //printf("%f\n",car->_distFromStartLine); 
+		    	if(car->_distFromStartLine / ReInfo->track->length > 0.9){
+		    		*pis_finish_main_read = true;
+                    is_finish_lock = true;
+		    		// printf("\n%s\n","finish 99% race");
+		    	}
+		    }
+        }
+		//if(car->_laps == s->_totLaps){
+		//	if(car->_distFromStartLine / ReInfo->track->length > 0.9){
+		//		*pis_finish_main_read = true;
+		//		// printf("\n%s\n","finish 99% race");
+		//	}else{
+		//		*pis_finish_main_read = false;
+		//	}
+		//}
 		if (car->_speed_x < 0.4){
 			stuck_count++;
 		}else{
@@ -995,7 +1020,9 @@ ReOneStep(double deltaTimeIncrement)
 
     is_sim_dqn_main = true;	
     //std::cout<<"is_dqn_before"<< *is_ready_dqn_main<<std::endl;
-    sensor->set_sensor();
+    if(scr_index != -1){
+        sensor->set_sensor();
+    }
 
     //std::cout<<"is_dqn_after"<< *is_ready_dqn_main<<std::endl;
 	bool restartRequested = false;
@@ -1003,6 +1030,7 @@ ReOneStep(double deltaTimeIncrement)
 		if(s->cars[i]->ctrl.askRestart) {
 			restartRequested = true;
 			*pis_stuck_main_read = false;
+            is_finish_lock = false;
             s->cars[i]->ctrl.askRestart = false;
 			}
 		}
@@ -1035,7 +1063,17 @@ void
 ReStart(void)
 {
     delete sensor;
-    sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[0],ReInfo->s);
+    tSituation* s = ReInfo->s;
+    for (int i = 0; i < s->_ncars; i++) {
+        if(!strncmp(s->cars[i]->info.name,"scr_server 1",12)){
+            scr_index = i;
+            break;
+        }
+    }
+    if(scr_index != -1){
+        sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[scr_index],ReInfo->s);
+    }
+    //sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[0],ReInfo->s);
     ReInfo->_reRunning = 1;
     ReInfo->_reCurTime = GfTimeClock() - RCM_MAX_DT_SIMU;
 }
