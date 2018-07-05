@@ -130,7 +130,11 @@ static void drive(int index, tCarElt* car, tSituation *s)
     
     max_speed = car->_maxSpeedCmd;
 	driver[index]->drive(s);
-    if (car->_speed_x > max_speed){
+
+    if (max_speed == 0.0){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 1.0;
+    }else if (car->_speed_x > max_speed){
         car->_accelCmd = 0;
         car->_brakeCmd = 0.05;
     }

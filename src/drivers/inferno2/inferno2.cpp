@@ -544,7 +544,11 @@ static void drive(int index, tCarElt* car, tSituation *s)
     //lap[idx] = car->_laps;
 
     InvBrkCmd = - car->_brakeCmd;
-    if (car->_speed_x > max_speed){
+
+    if (max_speed == 0.0){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 1.0;
+    }else if (car->_speed_x > max_speed){
         car->_accelCmd = 0;
         car->_brakeCmd = 0.05;
     }
