@@ -35,7 +35,7 @@
 #include "driver.h"
 
 #define NBBOTS 10
-
+float max_speed;
 static const char* botname[NBBOTS] = {
 	"damned 1", "damned 2", "damned 3", "damned 4", "damned 5",
 	"damned 6", "damned 7", "damned 8", "damned 9", "damned 10"
@@ -111,7 +111,12 @@ static void newRace(int index, tCarElt* car, tSituation *s)
 // Drive during race.
 static void drive(int index, tCarElt* car, tSituation *s)
 {
+    max_speed = car->_maxSpeedCmd;
 	driver[index]->drive(s);
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

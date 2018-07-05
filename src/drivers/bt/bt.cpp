@@ -47,7 +47,7 @@ static const char* botdesc[NBBOTS] = {
 };
 
 static Driver *driver[NBBOTS];
-
+float max_speed;
 static void initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSituation *s);
 static void newRace(int index, tCarElt* car, tSituation *s);
 static void drive(int index, tCarElt* car, tSituation *s);
@@ -111,7 +111,12 @@ static void newRace(int index, tCarElt* car, tSituation *s)
 // Drive during race.
 static void drive(int index, tCarElt* car, tSituation *s)
 {
+    max_speed = car->_maxSpeedCmd;
 	driver[index]->drive(s);
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

@@ -38,6 +38,7 @@
 
 #include "common.h"
 
+float max_speed;
 static void initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSituation *s);
 static void drive(int index, tCarElt* car, tSituation *s);
 static void newrace(int index, tCarElt* car, tSituation *s);
@@ -396,6 +397,7 @@ void newrace(int index, tCarElt* car, tSituation *s)
  */
 static void drive(int index, tCarElt* car, tSituation *s)
 {
+    max_speed = car->_maxSpeedCmd;
     int 		idx = index - 1;
     tdble 		Dy, Dny;
     tdble 		Vy;
@@ -542,5 +544,9 @@ static void drive(int index, tCarElt* car, tSituation *s)
     //lap[idx] = car->_laps;
 
     InvBrkCmd = - car->_brakeCmd;
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 

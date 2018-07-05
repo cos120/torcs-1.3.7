@@ -113,6 +113,10 @@ static void newRace(int index, tCarElt* car, tSituation *s)
 static void drive(int index, tCarElt* car, tSituation *s)
 {
 	driver[index]->drive(s);
+    if (car->_speed_x > car->_maxSpeedCmd){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

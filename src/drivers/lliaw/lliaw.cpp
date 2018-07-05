@@ -29,7 +29,7 @@ static int  InitFuncPt(int index, void *pt);
 static int  pitcmd(int index, tCarElt* car, tSituation *s);
 static void shutdown(int index);
 float getClutch(MyCar* myc, tCarElt* car);
-
+float max_speed = 0.0;
 static const char* botname[BOTS] = {
 	"lliaw 1", "lliaw 2", "lliaw 3", "lliaw 4", "lliaw 5",
 	"lliaw 6", "lliaw 7", "lliaw 8", "lliaw 9", "lliaw 10"
@@ -163,6 +163,7 @@ static void newRace(int index, tCarElt* car, tSituation *situation)
 // Controls the car.
 static void drive(int index, tCarElt* car, tSituation *situation)
 {
+        max_speed = car->_maxSpeedCmd;
 	tdble angle;
 	tdble brake;
 	tdble b1;							// Brake value in case we are to fast HERE and NOW.
@@ -457,6 +458,10 @@ static void drive(int index, tCarElt* car, tSituation *situation)
 
 	if (myc->tr_mode == 0) car->_steerCmd = steer;
 	car->_clutchCmd = getClutch(myc, car);
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

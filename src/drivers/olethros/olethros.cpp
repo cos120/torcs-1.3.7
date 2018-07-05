@@ -51,6 +51,7 @@ namespace olethros
 #define BUFSIZE 20
 #define NBBOTS 10
 
+float max_speed = 0.0;
 static const char* botname[NBBOTS] = {
 	"olethros 1", "olethros 2", "olethros 3", "olethros 4", "olethros 5",
 	"olethros 6", "olethros 7", "olethros 8", "olethros 9", "olethros 10"
@@ -126,7 +127,13 @@ static void newRace(int index, tCarElt* car, tSituation *s)
 // Drive during race.
 static void drive(int index, tCarElt* car, tSituation *s)
 {
+    
+    max_speed = car->_maxSpeedCmd;
 	driver[index]->drive(s);
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 

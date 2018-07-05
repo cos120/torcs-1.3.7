@@ -73,6 +73,8 @@ extern double* ptrack_pos_main_read;
 extern double* prpm_main_read;
 extern bool* pis_stuck_main_read;
 extern float* pset_speed_main;
+extern int* probot_count_main;
+
 double* ptrack_radius_main_read;
 bool* pis_ready_main_read;
 
@@ -769,13 +771,16 @@ extern int key;
 int key_local = 0;
 int scr_index = -1;
 bool is_finish_lock = false;
+tCarElt** robot_cars;
+int robot_count = 0;
 extern char* pmap_ok;
 #include <string.h>
 static void
 ReOneStep(double deltaTimeIncrement)
 {
 	if(pis_restart_write == NULL){
-        *pset_speed_main = 100;
+        //*pset_speed_main = 100;
+        *probot_count_main = robot_count;
         key_local = key;
 		pis_restart_write = pis_restart_main_write;
 		psteer_write = psteer_main_write;
@@ -892,15 +897,6 @@ ReOneStep(double deltaTimeIncrement)
 	}
     ReInfo->track->pits.speedLimit = 100;
 	STOP_PROFILE("rbDrive*");
-    for (int i = 0; i < s->_ncars; i++) {
-        if(!strncmp(s->cars[i]->info.name,"tita",4)){
-            //scr_index = i;
-            s->cars[i]->_maxSpeedCmd = *pset_speed_main;
-            //std::cout<<"speed :" << *pset_speed_main << std::endl;
-            //std::cout << scr_index<<endl;
-            //break;
-        }
-    }
     //if (scr_index != -1){
     //    s->cars[scr_index]->_maxSpeedCmd = *pset_speed_main;
     //    std::cout<<"speed :" << *pset_speed_main << std::endl;
@@ -908,6 +904,15 @@ ReOneStep(double deltaTimeIncrement)
 	// std::clock_t start;
     // double duration;
 
+    //for (i = 0; i < s->_ncars; i++) {
+    //    s->cars[i]->_maxSpeedCmd = pset_speed_main[i];
+    //    //std::cout<<"speed :" << s->cars[i]->_maxSpeedCmd << std::endl;
+    //}
+    for (i = 0; i < robot_count; i++) {
+        robot_cars[i]->_maxSpeedCmd = pset_speed_main[i];
+        //std::cout<<"speed :" << s->cars[i]->_maxSpeedCmd << std::endl;
+    }
+    //std::cout<<"123123" << std::endl;
     // start = std::clock();
 	START_PROFILE("_reSimItf.update*");
 	ReInfo->_reSimItf.update(s, deltaTimeIncrement, -1);
@@ -1059,17 +1064,25 @@ ReOneStep(double deltaTimeIncrement)
 	ReSortCars();
 }
 
+//zj 
+
 void
 ReStart(void)
 {
     delete sensor;
+    delete robot_cars;
     tSituation* s = ReInfo->s;
+    robot_cars = (tCarElt**)malloc(sizeof(s->cars[0]) * (s->_ncars - 1));
+    int robot_index = 0;
     for (int i = 0; i < s->_ncars; i++) {
         if(!strncmp(s->cars[i]->info.name,"scr_server 1",12)){
             scr_index = i;
-            break;
+        }else{
+            robot_cars[robot_index++] = (s->cars[i]);
         }
     }
+    robot_count = robot_index;
+    *probot_count_main = robot_count;
     if(scr_index != -1){
         sensor = new get_sensors(ReInfo->track,ReInfo->s->cars[scr_index],ReInfo->s);
     }
@@ -1109,7 +1122,6 @@ reCapture(void)
 	GfImgWritePng(img, buf, vw, vh);
 	free(img);
 }
-
 
 int
 ReUpdate(void)

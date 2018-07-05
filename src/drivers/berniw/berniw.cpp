@@ -32,7 +32,7 @@ static void newRace(int index, tCarElt* car, tSituation *situation);
 static int  InitFuncPt(int index, void *pt);
 static int  pitcmd(int index, tCarElt* car, tSituation *s);
 static void shutdown(int index);
-
+float max_speed;
 
 static const char* botname[BOTS] = {
 	"berniw 1", "berniw 2", "berniw 3", "berniw 4", "berniw 5",
@@ -151,6 +151,7 @@ static void newRace(int index, tCarElt* car, tSituation *situation)
 /* controls the car */
 static void drive(int index, tCarElt* car, tSituation *situation)
 {
+    max_speed = car->_maxSpeedCmd;
 	tdble angle;
 	tdble brake;
 	tdble b1;							/* brake value in case we are to fast HERE and NOW */
@@ -425,6 +426,10 @@ static void drive(int index, tCarElt* car, tSituation *situation)
 	}
 
 	if (myc->tr_mode == 0) car->_steerCmd = steer;
+    if (car->_speed_x > max_speed){
+        car->_accelCmd = 0;
+        car->_brakeCmd = 0.05;
+    }
 }
 
 /* pitstop callback */
