@@ -57,7 +57,7 @@ maintrackgen.o: maintrackgen.cpp /usr/include/stdc-predef.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/plib/ssgconf.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /home/zj/software/torcs-1.3.7/export/include/tgf.h \
@@ -150,7 +150,7 @@ track.o: track.cpp /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /usr/include/string.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -387,7 +387,7 @@ relief.o: relief.cpp /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/plib/ssgconf.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /home/zj/software/torcs-1.3.7/export/include/tgf.h \
@@ -479,7 +479,7 @@ elevation.o: elevation.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /usr/include/string.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -562,7 +562,7 @@ objects.o: objects.cpp /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/plib/ssgconf.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /home/zj/software/torcs-1.3.7/export/include/tgf.h \
@@ -725,7 +725,7 @@ util.o: util.cpp /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -794,7 +794,7 @@ raceline.o: raceline.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \

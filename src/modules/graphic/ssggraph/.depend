@@ -23,9 +23,9 @@ grmain.o: grmain.cpp /usr/include/stdc-predef.h /usr/include/time.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/x86_64-linux-gnu/bits/sys_errlist.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
- /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
+ /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/GL/glut.h \
+ /usr/include/GL/freeglut_std.h /usr/include/GL/gl.h \
+ /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
  /usr/include/plib/ssg.h /usr/include/plib/sg.h /usr/include/plib/ul.h \
@@ -192,8 +192,8 @@ grboard.o: grboard.cpp /usr/include/stdc-predef.h /usr/include/stdlib.h \
  /home/zj/software/torcs-1.3.7/export/include/raceman.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h \
  /home/zj/software/torcs-1.3.7/export/include/simu.h grboard.h \
- grtrackmap.h /usr/local/include/GL/glut.h \
- /usr/local/include/GL/freeglut_std.h /usr/include/GL/glu.h \
+ grtrackmap.h /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
+ /usr/include/GL/glu.h \
  /home/zj/software/torcs-1.3.7/export/include/glfeatures.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /usr/include/plib/js.h \
@@ -264,7 +264,7 @@ ssggraph.o: ssggraph.cpp /usr/include/stdc-predef.h /usr/include/GL/gl.h \
  /usr/include/x86_64-linux-gnu/bits/mathdef.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h /usr/include/plib/ul.h \
  /usr/include/ctype.h /usr/include/unistd.h \
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
@@ -382,8 +382,7 @@ grcam.o: grcam.cpp /usr/include/stdc-predef.h /usr/include/stdio.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h grcam.h \
  /home/zj/software/torcs-1.3.7/export/include/raceman.h \
  /home/zj/software/torcs-1.3.7/export/include/simu.h grscreen.h grboard.h \
- grtrackmap.h /usr/local/include/GL/glut.h \
- /usr/local/include/GL/freeglut_std.h \
+ grtrackmap.h /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /home/zj/software/torcs-1.3.7/export/include/glfeatures.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /usr/include/plib/js.h \
@@ -424,7 +423,7 @@ grcar.o: grcar.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -562,7 +561,7 @@ grscreen.o: grscreen.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h \
  /home/zj/software/torcs-1.3.7/export/include/screen_properties.h \
  /home/zj/software/torcs-1.3.7/export/include/portability.h \
@@ -615,7 +614,7 @@ grscene.o: grscene.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -715,7 +714,7 @@ grutil.o: grutil.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -866,7 +865,7 @@ grsmoke.o: grsmoke.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -963,7 +962,7 @@ grskidmarks.o: grskidmarks.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -1101,7 +1100,7 @@ grloadac.o: grloadac.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h \
  /home/zj/software/torcs-1.3.7/export/include/screen_properties.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h \
@@ -1193,7 +1192,7 @@ grmultitexstate.o: grmultitexstate.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h \
  /home/zj/software/torcs-1.3.7/export/include/screen_properties.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h \
@@ -1285,7 +1284,7 @@ grvtxtable.o: grvtxtable.cpp /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h \
  /home/zj/software/torcs-1.3.7/export/include/screen_properties.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h \
@@ -1384,8 +1383,8 @@ grtrackmap.o: grtrackmap.cpp /usr/include/stdc-predef.h grtrackmap.h \
  /home/zj/software/torcs-1.3.7/export/include/simu.h /usr/include/GL/gl.h \
  /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/local/include/GL/glut.h \
- /usr/local/include/GL/freeglut_std.h /usr/include/GL/glu.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glut.h \
+ /usr/include/GL/freeglut_std.h /usr/include/GL/glu.h \
  /home/zj/software/torcs-1.3.7/export/include/glfeatures.h \
  /home/zj/software/torcs-1.3.7/export/include/tgfclient.h \
  /usr/include/plib/js.h \
@@ -1469,7 +1468,7 @@ grtexture.o: grtexture.cpp /usr/include/stdc-predef.h grtexture.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/glu.h /usr/include/plib/js.h \
  /home/zj/software/torcs-1.3.7/export/include/screen_properties.h \
  /home/zj/software/torcs-1.3.7/export/include/graphic.h \
@@ -1516,7 +1515,7 @@ grcarlight.o: grcarlight.cpp /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/sys_errlist.h /usr/include/ctype.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -1694,9 +1693,9 @@ CarSoundData.o: CarSoundData.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h \
  /usr/include/c++/5/bits/range_access.h \
- /usr/include/c++/5/bits/vector.tcc TorcsSound.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h sound_defines.h QSoundChar.h CarSoundData.h
+ /usr/include/c++/5/bits/vector.tcc TorcsSound.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h sound_defines.h \
+ QSoundChar.h CarSoundData.h
 TorcsSound.o: TorcsSound.cpp /usr/include/stdc-predef.h TorcsSound.h \
  /usr/include/plib/sg.h /usr/include/stdio.h /usr/include/features.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -1761,10 +1760,9 @@ TorcsSound.o: TorcsSound.cpp /usr/include/stdc-predef.h TorcsSound.h \
  /usr/include/x86_64-linux-gnu/asm/ioctls.h \
  /usr/include/asm-generic/ioctls.h \
  /usr/include/x86_64-linux-gnu/bits/ioctl-types.h \
- /usr/include/x86_64-linux-gnu/sys/ttydefaults.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h sound_defines.h SoundInterface.h \
- /home/zj/software/torcs-1.3.7/export/include/raceman.h \
+ /usr/include/x86_64-linux-gnu/sys/ttydefaults.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h sound_defines.h \
+ SoundInterface.h /home/zj/software/torcs-1.3.7/export/include/raceman.h \
  /home/zj/software/torcs-1.3.7/export/include/tgf.h \
  /usr/include/x86_64-linux-gnu/sys/param.h /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum.h \
@@ -1932,9 +1930,9 @@ PlibSoundInterface.o: PlibSoundInterface.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h \
  /usr/include/c++/5/bits/range_access.h \
- /usr/include/c++/5/bits/vector.tcc TorcsSound.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h sound_defines.h QSoundChar.h CarSoundData.h
+ /usr/include/c++/5/bits/vector.tcc TorcsSound.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h sound_defines.h \
+ QSoundChar.h CarSoundData.h
 OpenalSoundInterface.o: OpenalSoundInterface.cpp \
  /usr/include/stdc-predef.h SoundInterface.h /usr/include/plib/sl.h \
  /usr/include/stdio.h /usr/include/features.h \
@@ -2052,9 +2050,9 @@ OpenalSoundInterface.o: OpenalSoundInterface.cpp \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h \
  /usr/include/c++/5/bits/range_access.h \
- /usr/include/c++/5/bits/vector.tcc TorcsSound.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h sound_defines.h QSoundChar.h CarSoundData.h
+ /usr/include/c++/5/bits/vector.tcc TorcsSound.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h sound_defines.h \
+ QSoundChar.h CarSoundData.h
 grsound.o: grsound.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -2115,7 +2113,7 @@ grsound.o: grsound.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/c++/5/bits/cpu_defines.h \
  /usr/include/string.h \
  /home/zj/software/torcs-1.3.7/export/include/osspec.h \
- /usr/local/include/GL/glut.h /usr/local/include/GL/freeglut_std.h \
+ /usr/include/GL/glut.h /usr/include/GL/freeglut_std.h \
  /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/GL/glu.h \
@@ -2183,9 +2181,8 @@ grsound.o: grsound.cpp /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h \
  /usr/include/c++/5/bits/range_access.h \
- /usr/include/c++/5/bits/vector.tcc TorcsSound.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h QSoundChar.h CarSoundData.h
+ /usr/include/c++/5/bits/vector.tcc TorcsSound.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h QSoundChar.h CarSoundData.h
 SoundInterface.o: SoundInterface.cpp /usr/include/stdc-predef.h \
  SoundInterface.h /usr/include/plib/sl.h /usr/include/stdio.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
@@ -2302,6 +2299,6 @@ SoundInterface.o: SoundInterface.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/5/bits/stl_vector.h \
  /usr/include/c++/5/bits/stl_bvector.h \
  /usr/include/c++/5/bits/range_access.h \
- /usr/include/c++/5/bits/vector.tcc TorcsSound.h \
- /usr/local/include/AL/al.h /usr/local/include/AL/alc.h \
- /usr/include/AL/alut.h sound_defines.h QSoundChar.h CarSoundData.h
+ /usr/include/c++/5/bits/vector.tcc TorcsSound.h /usr/include/AL/al.h \
+ /usr/include/AL/alc.h /usr/include/AL/alut.h sound_defines.h \
+ QSoundChar.h CarSoundData.h
