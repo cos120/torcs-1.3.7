@@ -285,7 +285,7 @@ static int reRaceRealStart(void)
 
 	ReInfo->_reSimItf.update(s, RCM_MAX_DT_SIMU, -1);
 	for (i = 0; i < s->_ncars; i++) {
-        //s->cars[i]->_trkPos.toStart = 1000;
+        //s->cars[i]->_trkPos.toStart += 100;
 		carInfo[i].prevTrkPos = s->cars[i]->_trkPos;
 		//carInfo[i].prevTrkPos.toStart = 10000;
 	}

@@ -15,6 +15,8 @@
 #include <learning/learn_debug.h>
 #include <learning/policy.h>
 #include <learning/MathFunctions.h>
+#include <cmath>
+#define isnan std::isnan
 #ifdef WIN32
 #include <float.h>
 #define isnan _isnan

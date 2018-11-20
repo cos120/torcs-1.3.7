@@ -33,11 +33,13 @@
 #include <learning/ann_policy.h>
 #include <learning/MathFunctions.h>
 #include "geometry.h"
+#include <cmath>
 #include <math.h>
 #include <portability.h>
 #include "TrackData.h"
 #include "Trajectory.h"
 
+#define isnan std::isnan
 #ifdef WIN32
 #include <float.h>
 #define isnan _isnan

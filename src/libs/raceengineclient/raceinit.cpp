@@ -379,12 +379,14 @@ initStartingGrid(void)
 			curseg = curseg->prev;
 		}
 		ts = startpos - curseg->lgfromstart;
+        //std::cout << "ts:" << ts << std::endl;
 		car->_trkPos.seg = curseg;
 		car->_trkPos.toRight = tr;
 		switch (curseg->type) {
 			case TR_STR:
 				car->_trkPos.toStart = ts;
 				RtTrackLocal2Global(&(car->_trkPos), &(car->_pos_X), &(car->_pos_Y), TR_TORIGHT);
+                car->_pos_X += 50*i;
 				car->_yaw = curseg->angle[TR_ZS];
 				break;
 			case TR_RGT:
