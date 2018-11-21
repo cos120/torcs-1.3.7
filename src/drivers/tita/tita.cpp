@@ -167,7 +167,7 @@ static void newRace(int index, tCarElt* car, tSituation *situation)
 // Controls the car.
 static void drive(int index, tCarElt* car, tSituation *situation)
 {
-    max_speed = car->_maxSpeedCmd;
+    //max_speed = car->_maxSpeedCmd;
     //std::cout<<"speed:123123 "<<max_speed<<std::endl;
 	tdble angle;
 	tdble brake;
@@ -463,10 +463,13 @@ static void drive(int index, tCarElt* car, tSituation *situation)
 
 	if (myc->tr_mode == 0) car->_steerCmd = steer;
 	car->_clutchCmd = getClutch(myc, car);
-    if (car->_speed_x > max_speed){
+    if (car->_speed_x > 0.0){
         car->_accelCmd = 0;
         car->_brakeCmd = 0.05;
     }
+    car->_brakeCmd = 1.0;
+    car->_accelCmd = 0;
+
 }
 
 
