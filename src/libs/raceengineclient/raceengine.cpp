@@ -839,7 +839,7 @@ ReOneStep(double deltaTimeIncrement)
 	{ 
 		count++;
         //printf("count: %d\n",count);	
-		if (count>150) // 50 -> 10FPS
+		if (count>50) // 50 -> 10FPS
 		{
 			count=1;
 		    //printf("key: %d\n",count);	
